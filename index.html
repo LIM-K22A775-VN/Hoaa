@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tâm & Hoa</title>
+    <title>Hoaaa Hậuuu</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -188,7 +188,7 @@
             position: absolute;
             width: 200px;
             height: 270px;
-            background: white;
+            background: #fff; /* Đổi nền trắng tinh để ảnh trong suốt/nhỏ không bị đục */
             border-radius: 15px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.15);
             cursor: pointer;
@@ -197,14 +197,16 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             transform-origin: bottom center;
         }
 
         .fan-card img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain; /* Đổi từ cover thành contain để không bị ép vỡ hình hoặc cắt mờ */
             border-radius: 10px;
+            image-rendering: -webkit-optimize-contrast; /* Giúp tối ưu độ sắc nét cho ảnh trên trình duyệt */
         }
 
         /* Nút điều hướng qua lại */
@@ -387,27 +389,39 @@
             }
         }
 
-        // Tạo tự động 24 ảnh dạng quạt (không có tên ảnh ở dưới)
-        const totalPhotos = 31;
         const fanContainer = document.getElementById('fanContainer');
+        let cards = [];
         let currentIndex = 0;
 
-        for (let i = 1; i <= totalPhotos; i++) {
+        // Khớp hoàn toàn với danh sách file thực tế trong thư mục của bạn
+        const imagesArray = [
+            '1.jfif', '2.jfif', '3.jfif', '4.jfif', '5.jfif', '6.jfif', '7.jfif', '8.jfif', '9.jfif', '10.jfif',
+            '11.jfif', '12.jfif', '14.jfif', '15.jfif', '16.jfif', '17.jfif', '18.jfif', '19.jfif', '20.jfif', '21.png',
+            '22.jfif', '23.jfif', '24.jfif', '25.jfif', '26.jfif', '27.jfif', '28.jfif', '29.jfif', '30.jfif', '31.jfif',
+            '32.jfif', '32.png', '33.jfif', '33.png', '34.png', '36.png', '37.png', '38.png', '39.png', '40.png'
+        ];
+
+        const totalPhotos = imagesArray.length;
+
+        // Tạo thẻ ảnh
+        imagesArray.forEach((filename, index) => {
             const card = document.createElement('div');
             card.className = 'fan-card';
             card.innerHTML = `
-                <img src="1_Hoaaaa/${i}.jfif" onerror="this.src='https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=300'">
+                <img src="1_Hoaaaa/${filename}" alt="Memory ${index + 1}" onerror="this.src='https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=300'">
             `;
             card.onclick = () => {
-                currentIndex = i - 1;
+                currentIndex = index;
                 updateFanPositions();
             };
             fanContainer.appendChild(card);
-        }
+        });
 
-        const cards = document.querySelectorAll('.fan-card');
+        cards = document.querySelectorAll('.fan-card');
 
         function updateFanPositions() {
+            if (cards.length === 0) return;
+            
             cards.forEach((card, index) => {
                 let offset = index - currentIndex;
 
@@ -435,6 +449,7 @@
         }
 
         function slideCard(direction) {
+            if (totalPhotos === 0) return;
             currentIndex += direction;
             if (currentIndex < 0) currentIndex = 0;
             if (currentIndex >= totalPhotos) currentIndex = totalPhotos - 1;
