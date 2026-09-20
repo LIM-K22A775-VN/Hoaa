@@ -30,11 +30,11 @@
             justify-content: center;
             align-items: center;
             position: relative;
-            overflow: hidden;
+            overflow-x: hidden;
             padding: 20px;
         }
 
-        /* Hiệu ứng hoa bay nền xuất hiện ngay lập tức và bay liên tục */
+        /* Hiệu ứng hoa bay nền */
         .flower-float {
             position: fixed;
             font-size: 24px;
@@ -72,7 +72,7 @@
 
         header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             position: relative;
             z-index: 10;
         }
@@ -82,13 +82,40 @@
             font-size: 3.5rem;
             color: var(--primary-pink);
             text-shadow: 2px 2px 4px rgba(255,182,193,0.6);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
         header p {
-            font-size: 1.05rem;
+            font-size: 1rem;
             color: #666;
             font-weight: 500;
+            margin-bottom: 12px;
+        }
+
+        /* Góc nhỏ "Thời gian quen nhau" dạng badge nhỏ gọn */
+        .love-counter-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #ffffff;
+            border: 1.5px dashed #ffb6c1;
+            padding: 6px 14px;
+            border-radius: 30px;
+            box-shadow: 0 4px 12px rgba(216, 112, 147, 0.12);
+            font-size: 0.85rem;
+            color: #777;
+            position: relative;
+            z-index: 10;
+        }
+
+        .love-counter-badge .badge-title {
+            font-weight: 600;
+            color: var(--primary-pink);
+        }
+
+        #love-clock {
+            font-weight: 600;
+            color: #ff69b4;
         }
 
         /* Menu các ô (3 ô gọn gàng) */
@@ -100,6 +127,7 @@
             gap: 15px;
             max-width: 450px;
             width: 100%;
+            margin-top: 25px;
         }
 
         .menu-card {
@@ -147,7 +175,7 @@
         }
 
         footer {
-            margin-top: 30px;
+            margin-top: 25px;
             position: relative;
             z-index: 10;
             font-size: 0.85rem;
@@ -157,7 +185,7 @@
 </head>
 <body>
 
-    <!-- Hiệu ứng hoa bay xuất hiện ngay lập tức, không chờ đợi -->
+    <!-- Hiệu ứng hoa bay -->
     <script>
         const backgroundFlowers = ['🌷', '🌸', '🌹', '🌺', '🌻', '💮'];
         for (let i = 0; i < 20; i++) {
@@ -165,14 +193,14 @@
             div.className = 'flower-float';
             div.innerHTML = backgroundFlowers[Math.floor(Math.random() * backgroundFlowers.length)];
             div.style.left = Math.random() * 100 + 'vw';
-            div.style.top = Math.random() * 100 + 'vh'; // Rải đều vị trí ngay khi load
+            div.style.top = Math.random() * 100 + 'vh';
             div.style.animationDuration = (Math.random() * 4 + 5) + 's';
-            div.style.animationDelay = '0s'; // Không có độ trễ
+            div.style.animationDelay = '0s';
             div.style.fontSize = (Math.random() * 10 + 14) + 'px';
             document.body.appendChild(div);
         }
 
-        // Hiệu ứng hoa bung nở khi click vào màn hình
+        // Hiệu ứng hoa bung nở khi click
         function createFlowerBurst(x, y) {
             const burstSymbols = ['🌷', '🌸', '💖', '✨', '🌹', '🌻', '💮'];
             for (let i = 0; i < 18; i++) {
@@ -206,6 +234,12 @@
     <header>
         <h1>Hoaaa Hậuuu 🌷</h1>
         <p>Góc nhỏ kỷ niệm của Hoaa & Tâm</p>
+        
+        <!-- Góc nhỏ Thời gian quen nhau -->
+        <div class="love-counter-badge">
+            <span class="badge-title">⏳ Thời gian quen nhau:</span>
+            <span id="love-clock">Đang tính...</span>
+        </div>
     </header>
 
     <div class="menu-container">
@@ -214,7 +248,7 @@
             <div class="menu-icon">💬</div>
             <div class="menu-text">
                 <div class="menu-title">Cuộc Trò Chuyện</div>
-                <div class="menu-desc">Nhật ký tin nhắn </div>
+                <div class="menu-desc">Nhật ký tin nhắn</div>
             </div>
         </a>
 
@@ -240,6 +274,30 @@
     <footer>
         Made with 🌷 by Tâm & Hoaa
     </footer>
+
+    <!-- Script tự động cập nhật đồng hồ đếm từ 27/08/2026 -->
+    <script>
+        const startDate = new Date("2026-08-27T00:00:00");
+
+        function updateLoveCounter() {
+            const now = new Date();
+            const diff = now - startDate;
+
+            if (diff > 0) {
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                document.getElementById("love-clock").innerText = `${days} ngày ${hours} giờ ${minutes} phút ${seconds} giây`;
+            } else {
+                document.getElementById("love-clock").innerText = "Sắp đến ngày kỷ niệm rồi!";
+            }
+        }
+
+        updateLoveCounter();
+        setInterval(updateLoveCounter, 1000);
+    </script>
 
 </body>
 </html>
