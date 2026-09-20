@@ -35,21 +35,20 @@
             padding: 15px;
         }
 
-        /* Hiệu ứng hoa bay nền */
+        /* Hiệu ứng hoa bay nền xuất hiện ngay lập tức và bay liên tục */
         .flower-float {
             position: fixed;
             font-size: 24px;
             user-select: none;
             z-index: 0;
             pointer-events: none;
-            animation: floatAround linear infinite;
+            animation: floatInstant linear infinite;
             opacity: 0.6;
         }
 
-        @keyframes floatAround {
-            0% { transform: translateY(110vh) translateX(0) rotate(0deg); }
-            50% { transform: translateY(50vh) translateX(50px) rotate(180deg); }
-            100% { transform: translateY(-10vh) translateX(-30px) rotate(360deg); }
+        @keyframes floatInstant {
+            0% { transform: translateY(105vh) translateX(0) rotate(0deg); }
+            100% { transform: translateY(-10vh) translateX(30px) rotate(360deg); }
         }
 
         /* Nút quay lại trang chủ dạng viên thuốc dễ thương */
@@ -197,7 +196,7 @@
     <!-- Nút quay về trang chủ dạng icon dễ thương -->
     <a href="index.html" class="back-btn">🏠</a>
 
-    <!-- Hiệu ứng hoa bay -->
+    <!-- Hiệu ứng hoa bay xuất hiện ngay lập tức, không chờ đợi -->
     <script>
         const flowers = ['🌷', '🌸', '🌹', '🌺', '🌻', '💮'];
         for (let i = 0; i < 15; i++) {
@@ -205,8 +204,9 @@
             div.className = 'flower-float';
             div.innerHTML = flowers[Math.floor(Math.random() * flowers.length)];
             div.style.left = Math.random() * 100 + 'vw';
-            div.style.animationDuration = (Math.random() * 8 + 6) + 's';
-            div.style.animationDelay = (Math.random() * 5) + 's';
+            div.style.top = Math.random() * 100 + 'vh'; // Rải sẵn vị trí trên màn hình
+            div.style.animationDuration = (Math.random() * 4 + 5) + 's';
+            div.style.animationDelay = '0s'; // Không có độ trễ, bay luôn
             div.style.fontSize = (Math.random() * 10 + 14) + 'px';
             document.body.appendChild(div);
         }
@@ -352,4 +352,4 @@
         renderMessages();
     </script>
 </body>
-</html>         
+</html>

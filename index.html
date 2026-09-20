@@ -17,6 +17,7 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -29,30 +30,49 @@
             justify-content: center;
             align-items: center;
             position: relative;
-            overflow-x: hidden;
+            overflow: hidden;
             padding: 20px;
         }
 
-        /* Hiệu ứng hoa bay nền */
+        /* Hiệu ứng hoa bay nền xuất hiện ngay lập tức và bay liên tục */
         .flower-float {
             position: fixed;
             font-size: 24px;
             user-select: none;
             z-index: 0;
             pointer-events: none;
-            animation: floatAround linear infinite;
+            animation: floatInstant linear infinite;
             opacity: 0.6;
         }
 
-        @keyframes floatAround {
-            0% { transform: translateY(110vh) translateX(0) rotate(0deg); }
-            50% { transform: translateY(50vh) translateX(50px) rotate(180deg); }
-            100% { transform: translateY(-10vh) translateX(-30px) rotate(360deg); }
+        @keyframes floatInstant {
+            0% { transform: translateY(105vh) translateX(0) rotate(0deg); }
+            100% { transform: translateY(-10vh) translateX(30px) rotate(360deg); }
+        }
+
+        /* Hiệu ứng hoa bung nở khi click */
+        .burst-flower {
+            position: fixed;
+            font-size: 24px;
+            z-index: 9999;
+            pointer-events: none;
+            animation: burstFromPoint 1s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+        }
+
+        @keyframes burstFromPoint {
+            0% {
+                transform: translate(0, 0) scale(0.3) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--dx), var(--dy)) scale(1.4) rotate(540deg);
+                opacity: 0;
+            }
         }
 
         header {
             text-align: center;
-            margin-bottom: 35px;
+            margin-bottom: 30px;
             position: relative;
             z-index: 10;
         }
@@ -127,7 +147,7 @@
         }
 
         footer {
-            margin-top: 35px;
+            margin-top: 30px;
             position: relative;
             z-index: 10;
             font-size: 0.85rem;
@@ -137,18 +157,50 @@
 </head>
 <body>
 
+    <!-- Hiệu ứng hoa bay xuất hiện ngay lập tức, không chờ đợi -->
     <script>
-        const flowers = ['🌷', '🌸', '🌹', '🌺', '🌻', '💮'];
+        const backgroundFlowers = ['🌷', '🌸', '🌹', '🌺', '🌻', '💮'];
         for (let i = 0; i < 20; i++) {
             const div = document.createElement('div');
             div.className = 'flower-float';
-            div.innerHTML = flowers[Math.floor(Math.random() * flowers.length)];
+            div.innerHTML = backgroundFlowers[Math.floor(Math.random() * backgroundFlowers.length)];
             div.style.left = Math.random() * 100 + 'vw';
-            div.style.animationDuration = (Math.random() * 8 + 6) + 's';
-            div.style.animationDelay = (Math.random() * 5) + 's';
-            div.style.fontSize = (Math.random() * 12 + 15) + 'px';
+            div.style.top = Math.random() * 100 + 'vh'; // Rải đều vị trí ngay khi load
+            div.style.animationDuration = (Math.random() * 4 + 5) + 's';
+            div.style.animationDelay = '0s'; // Không có độ trễ
+            div.style.fontSize = (Math.random() * 10 + 14) + 'px';
             document.body.appendChild(div);
         }
+
+        // Hiệu ứng hoa bung nở khi click vào màn hình
+        function createFlowerBurst(x, y) {
+            const burstSymbols = ['🌷', '🌸', '💖', '✨', '🌹', '🌻', '💮'];
+            for (let i = 0; i < 18; i++) {
+                const span = document.createElement('span');
+                span.className = 'burst-flower';
+                span.innerHTML = burstSymbols[Math.floor(Math.random() * burstSymbols.length)];
+                span.style.left = x + 'px';
+                span.style.top = y + 'px';
+
+                const angle = Math.random() * Math.PI * 2;
+                const distance = Math.random() * 140 + 30;
+                const dx = Math.cos(angle) * distance + 'px';
+                const dy = Math.sin(angle) * distance + 'px';
+
+                span.style.setProperty('--dx', dx);
+                span.style.setProperty('--dy', dy);
+
+                document.body.appendChild(span);
+
+                setTimeout(() => {
+                    span.remove();
+                }, 1000);
+            }
+        }
+
+        document.addEventListener('click', function(event) {
+            createFlowerBurst(event.clientX, event.clientY);
+        });
     </script>
 
     <header>
@@ -162,16 +214,16 @@
             <div class="menu-icon">💬</div>
             <div class="menu-text">
                 <div class="menu-title">Cuộc Trò Chuyện</div>
-                <div class="menu-desc">Xem lại nhật ký tin nhắn giữa hai đứa</div>
+                <div class="menu-desc">Nhật ký tin nhắn </div>
             </div>
         </a>
 
-        <!-- Ô 2: Chia sẻ hằng ngày -->
-        <a href="daily.html" class="menu-card">
-            <div class="menu-icon">📅</div>
+        <!-- Ô 2: Lời Nhắn Nhủ -->
+        <a href="notes.html" class="menu-card">
+            <div class="menu-icon">📝</div>
             <div class="menu-text">
-                <div class="menu-title">Chia Sẻ Hằng Ngày</div>
-                <div class="menu-desc">Chuyện vui buồn và công việc mỗi ngày</div>
+                <div class="menu-title">Lời Nhắn Nhủ - Tâm & Hoa</div>
+                <div class="menu-desc">Góc nhỏ ghi lại những lời nhắn nhủ</div>
             </div>
         </a>
 
@@ -180,7 +232,7 @@
             <div class="menu-icon">🖼️</div>
             <div class="menu-text">
                 <div class="menu-title">Hình Ảnh Kỷ Niệm</div>
-                <div class="menu-desc">Album ảnh xòe quạt xinh xắn của Hoaa</div>
+                <div class="menu-desc">Album ảnh xinh xắn của Hoaa</div>
             </div>
         </a>
     </div>
