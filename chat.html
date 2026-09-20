@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Cuộc Trò Chuyện - Tâm & Hoa 🌷</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #fff0f5;
+            --text-main: #4a4a4a;
+            --primary-pink: #d87093;
+            --light-pink: #ffe4e1;
+            --light-purple: #e6e6fa;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding: 15px;
+        }
+
+        /* Hiệu ứng hoa bay nền */
+        .flower-float {
+            position: fixed;
+            font-size: 24px;
+            user-select: none;
+            z-index: 0;
+            pointer-events: none;
+            animation: floatAround linear infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes floatAround {
+            0% { transform: translateY(110vh) translateX(0) rotate(0deg); }
+            50% { transform: translateY(50vh) translateX(50px) rotate(180deg); }
+            100% { transform: translateY(-10vh) translateX(-30px) rotate(360deg); }
+        }
+
+        /* Nút quay lại trang chủ dạng viên thuốc dễ thương */
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: white;
+            color: var(--primary-pink);
+            border: 2px solid #ffd1dc;
+            padding: 8px 18px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(216, 112, 147, 0.15);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: var(--light-pink);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(216, 112, 147, 0.25);
+        }
+
+        /* Tiêu đề phía trên khung */
+        header {
+            text-align: center;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 10;
+        }
+
+        header h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.8rem;
+            color: var(--primary-pink);
+            text-shadow: 1px 1px 3px rgba(255,182,193,0.5);
+        }
+
+        /* Khung lớn bọc ngoài */
+        .ebook-wrapper {
+            background: white;
+            width: 100%;
+            max-width: 680px;
+            height: 78vh;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(216, 112, 147, 0.15);
+            border: 2px solid #ffd1dc;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 10;
+            overflow: hidden;
+        }
+
+        /* Thanh công cụ phía trên khung */
+        .ebook-toolbar {
+            padding: 12px 20px;
+            border-bottom: 1px solid #fce4ec;
+            display: flex;
+            align-items: center;
+            background: #fff9fa;
+        }
+
+        .toolbar-badge {
+            background: var(--light-pink);
+            color: var(--primary-pink);
+            padding: 6px 16px;
+            border-radius: 15px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border: 1px solid #ffb6c1;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Khung chứa đoạn chat có thanh cuộn riêng */
+        .chat-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Tùy chỉnh thanh cuộn xinh xắn */
+        .chat-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        .chat-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .chat-container::-webkit-scrollbar-thumb {
+            background: #ffb6c1;
+            border-radius: 10px;
+        }
+        .chat-container::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-pink);
+        }
+
+        .chat-bubble {
+            max-width: 80%;
+            padding: 12px 18px;
+            border-radius: 18px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.03);
+            word-wrap: break-word;
+            position: relative;
+        }
+
+        .chat-bubble.tam {
+            background-color: var(--light-pink);
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+            border: 1px solid #ffb6c1;
+        }
+
+        .chat-bubble.hoa {
+            background-color: var(--light-purple);
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+            border: 1px solid #d8bfd8;
+        }
+
+        .sender-name {
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 4px;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Nút quay về trang chủ dạng icon dễ thương -->
+    <a href="index.html" class="back-btn">🏠</a>
+
+    <!-- Hiệu ứng hoa bay -->
+    <script>
+        const flowers = ['🌷', '🌸', '🌹', '🌺', '🌻', '💮'];
+        for (let i = 0; i < 15; i++) {
+            const div = document.createElement('div');
+            div.className = 'flower-float';
+            div.innerHTML = flowers[Math.floor(Math.random() * flowers.length)];
+            div.style.left = Math.random() * 100 + 'vw';
+            div.style.animationDuration = (Math.random() * 8 + 6) + 's';
+            div.style.animationDelay = (Math.random() * 5) + 's';
+            div.style.fontSize = (Math.random() * 10 + 14) + 'px';
+            document.body.appendChild(div);
+        }
+    </script>
+
+    <header>
+        <h1>Hoaa 🌷</h1>
+    </header>
+
+    <!-- Khung ebook bọc ngoài -->
+    <div class="ebook-wrapper">
+        <div class="ebook-toolbar">
+            <div class="toolbar-badge">💬 Trò Chuyện ✨</div>
+        </div>
+
+        <!-- Khung cuộn nội dung chat bên trong -->
+        <div class="chat-container" id="chatContainer">
+            <!-- Render bằng JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        const defaultMessages = [
+            { sender: 'tam', name: 'Tâm 🌷', text: 'kết bạn fb đi t k làm việc trên zalo' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'K làm việc trên zl :))' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'Ẻ' },
+            { sender: 'tam', name: 'Tâm 🌷', text: 'Ta xem hết tin rồi đấy nhá hoa hậu🐧' },
+            { sender: 'tam', name: 'Tâm 🌷', text: 'nhìn dáng cũng có nét đó<br>thi mau k lại muộn bây giờ' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'Trc m đi dạy à' },
+            { sender: 'tam', name: 'Tâm 🌷', text: 'anh m đi dạy đến nay đã là lăm thứ lăm rồi' },
+            { sender: 'tam', name: 'Tâm 🌷', text: 'Chào gái Hàn đẹp gái nha, bạn về trọ chưa, mình là Tâm, mấy bữa nay chúng ta cứ xưng hô m t cũng chán rồi nhỉ, thôii mình chuyển qua cậu tớ bạn mình đi cho nó lịch sự ha.' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'Chưa chán<br>=)) thích lắm' },
+            { sender: 'tam', name: 'Tâm 🌷', text: 'Thế không chịu cậu tớ thì chuyển thẳng qua \'anh - em\' luôn cho tiện' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'Chả<br>Vướng' },
+            { sender: 'tam', name: 'Tâm', text: 'thôi anh m tu tiên đây' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'Vc đi đọc kinh à' },
+            { sender: 'tam', name: 'Tâm', text: 'đi học em ới' },
+            { sender: 'tam', name: 'Tâm', text: 'người con gái bận rộn, không bao giờ nhắn quá 3 dòng' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'Bận lắm🥲' },
+            { sender: 'tam', name: 'Tâm', text: 'được khuôn mặt thôi chiều cao chưa đạt đâu em' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'Đủ mà cũng cao mà' },
+            { sender: 'tam', name: 'Tâm 🌷', text: 'khi nào thi nói luôn' },
+            { sender: 'tam', name: 'Tâm 🌷', text: 'vừa đc làm gái hàn vừa đc làm người mẫu thì chả yêu đời 🤣' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'Thôi đi làm 1 tgian đi xong đi tu<br>Xong ở vậy đi<br>Đưa tiền cho t<br>T cho ở<br>Cho t sổ đỏ chettt t bảo con t chôn' },
+            { sender: 'tam', name: 'Tâm 🌷', text: 'không được<br>anh m không ngu nhá' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'Ơ k thấy thít à' },
+            { sender: 'tam', name: 'Tâm 🌷', text: 'cũng cũng' },
+            { sender: 'tam', name: 'Tâm 🌷', text: 't thấy b nha, ngoài nói rất nhiều, dễ gần ; nhắn tin thì ít , ngắn, gọn , cụt ,…' },
+            { sender: 'tam', name: 'Tâm 🌷', text: 'có đứa biết t mỏ hỗn r m ơi' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'Mới đầu t còn thấy m hơi hơi giống LGBT' },
+            { sender: 'tam', name: 'Tâm 🌷', text: 'quá láo' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'Đừng đúm bạn<br>Bạn ăn vạ đấy' },
+            { sender: 'tam', name: 'Tâm 🌷', text: 'nma t buồn quá<br>tự nhiên m lại xem t như chị em<br>bữa gặp né t ra nhá , dám bảo anh m là lgbt' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'Nào qua đây t mết úp cho' },
+            { sender: 'tam', name: 'Tâm 🌷', text: 'thui ngại lắm, bà có mết đc khum đó' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'Đc mờ không đc thì mình cùng nhau tập' },
+            { sender: 'tam', name: 'Tâm 🌷', text: 'Bà nỡ lấy tui làm thí nghiệm sao..' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'M cũng xinh troai mà<br>Nhìn m duyênnn á' },
+            { sender: 'tam', name: 'Tâm 🌷', text: 'tớ không thích bị nói là xinh troai đâu' },
+            { sender: 'tam', name: 'Tâm 🌷', text: 'Mới đầu tui gặp bà cũng thấy bạn khó gần lắm , sau vài lần đi chung nói chuyện cũng thấy dễ gần dễ mến á' },
+            { sender: 'tam', name: 'Tâm 🌷', text: 'avt bà cũng đẹp, cute đó, avt đôi à bà' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'Điệu đời<br>Có hello kitti nên để' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'Z là t2 đi làm có ng lói chuyện roiii kp kiếm cớ lên xưởng' },
+            { sender: 'tam', name: 'Tâm 🌷', text: 'Bạn không cần nhắn gì hết đâu, tớ cảm ơn bạn nhiều từ giờ tớ sẽ giữ khoảng cách với bạn tránh làm phiền đến bạn, chúc bạn một cuộc đời thật bình yên.' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'Tớ hết giận r tớ biết cậu k có ý xấu nma cậu làm thế tớ buồn đấy' },
+            { sender: 'tam', name: 'Tâm 🌷', text: 'Sao tớ trước khi ngủ hay rửa mặt mà dễ ngủ hơn á' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'Ngta rửa mặt để tỉnh ngủ mà bà<br>Ai bày cho z' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'Toiii đã tự tin tay nghề make mang mặt đây toi vẽ cho' },
+            { sender: 'tam', name: 'Tâm 🌷', text: 'thật sự tớ chưa đc ai make cho nên chưa có quen :))' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'Tâm xin lỗi toi lại đi<br>Toi giận Tâm lắm đó<br>Tâm tệ lắm nào Tâm về toi make cho Tâm xong airdrop cho cả côn ty' },
+            { sender: 'tam', name: 'Tâm 🌷', text: 'tớ tệ lắm, Hoa cần make như nào Hoa nhớ liên hệ tớ nhé, tớ chuẩn bị tâm lý rồi<br>Tớ làm người bạn tớ thích chơi nhất cái văn phòng buồn, tớ chẳng hiểu lúc đấy tớ nghĩ gì, tớ không nghĩ Hoa lại đồng cảm đến thế' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'Bắt đền💢' },
+            { sender: 'tam', name: 'Tâm 🌷', text: 'Tớ xin lỗi bạn nhiều là lỗi của tớ<br>tất cả là lỗi của tớ, bạn có thể kể xấu với tất cả người trong công ty tớ nhận hết' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'Được roii toi nhận lời xin lỗi đó<br>Tớ có 6 tính z đâu trời🥲<br>Ngta là hoa hậu de thuong đó' },
+            { sender: 'tam', name: 'Tâm 🌷', text: 'Hoa hậu đừng bao giờ buồn nhé, đời người chỉ có một thôi, câu này của hoa hậu đấy' },
+            { sender: 'tam', name: 'Tâm 🌷', text: 'tự nhiên tớ thấy tên Hoa đẹp thật' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'Tên đẹp nhòoooo' },
+            { sender: 'tam', name: 'Tâm 🌷', text: 'Gật gật' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'Ng cum đẹpppp' },
+            { sender: 'tam', name: 'Tâm 🌷', text: 'Tớ ấn tượng nhất là tính cách<br>tớ nhớ là chúng ta nói chuyện câu đầu bằng cái chủ đề tớ ký nhầm sổ cung ứng là thời gian ra :))<br>lúc đấy tớ còn chẳng để ý bạn, quen đc ít hôm thì để ý nhiều hơn, tớ nhận ra bà này cũng tốt tính lắm đó chứ' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'Tốt tính còn thônggg minhhh xinh nứa<br>Ngại quáaaa<br>Cậu thì mỏ hỗn:3' },
+            { sender: 'tam', name: 'Tâm 🌷', text: 'tớ nói với Hoa hậu rồi đấy, hôm nào có ông trung nào theo bạn, gọi Tâm đến táng cho nhé😕' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'Tớ thấy nó tớ xách dép chạy' },
+            { sender: 'tam', name: 'Tâm 🌷', text: 'nếu tin tưởng hãy gọi tớ nhé' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'Đi thoiiii bạn mình mà ngại cgiii' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'Tớ make tone hồng cho Tâm đấyyy' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'H vẫn cayyyyyyy<br>Tại Tâmmmm' },
+            { sender: 'tam', name: 'Tâm 🌷', text: 'tất cả là tại tớ<br>tại tớ gợi lại nỗi đau của bạn<br>tớ thương bạn quá, sao mà ngốc nghếch, khổ thân vậy' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'Tâm đừng đi tu nhé' },
+            { sender: 'tam', name: 'Tâm 🌷', text: 'Bạn có biết không<br>Tớ còn có thể là thùng rác nữa đấy<br>hãy ném hết rác vào đây tớ sẽ giúp bạn vứt đi' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'Tâm đừng đi tu đã nhá tớ có tèn để xây đc nhà tình thương' },
+            { sender: 'tam', name: 'Tâm 🌷', text: 'lúc bạn giận tớ đã k biết nghĩ gì nữa, tớ đã đi nhờ người giúp 😢<br>Tớ hối hận lắm' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'Tớ bắt đền<br>Tớ đòi từng tí lại đấy' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'Nay mà Tâm đi làm là vp sẽ có 2 bé gấu trúc 🐼' },
+            { sender: 'tam', name: 'Tâm 🌷', text: 'má ơi<br>lâu lắm rồi con mới thức khuya nhắn tin như này<br>kể từ lúc ôn thi tốt nghiệp' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'Chỉ có thi đh tớ mới thâu nnay' },
+            { sender: 'tam', name: 'Tâm 🌷', text: 'bạn cũng rất giỏi đấy chứ vừa là bông Hoa tự động hoá lại còn xuất sắc nữa' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'Tâm đừng khennn toi thích lam' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'Nhâm nhủ nhon nhé' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'Tại Tâm đấy' },
+            { sender: 'tam', name: 'Tâm 🌷', text: 'Lại bắt đền tớ à, muốn bắt đền tớ gì đây ạ' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'Tâm Tâmmm<br>Tâm mua hình dán đi mai chơi cùng tớđồng ý' },
+            { sender: 'tam', name: 'Tâm 🌷', text: 'đồng ý' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'Tone hồng nhé' },
+            { sender: 'tam', name: 'Tâm 🌷', text: 'bà thích make gì cho tớ thì make' },
+            { sender: 'tam', name: 'Tâm 🌷', text: 'tớ sẽ hỗ trợ bạn hết mình để bạn thông minh lên :))' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'Tớ đồng ý<br>Tớ dại với ngơ lắm<br>Mềm lòng nữa' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'Đi tán trai khôn' },
+            { sender: 'tam', name: 'Tâm 🌷', text: 'có<br>Điii<br>Lần sau đi đón cung ứng cho tớ đi với nhé😅<br>Tớ che ô cho, tớ cũng thích đi đón cung ứng lắm' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'Nè cnay là lí do tớ đòi ăn cậu' },
+            { sender: 'tam', name: 'Tâm 🌷', text: 'tớ có chê bà béo đâu<br>tớ bảo bà béo lên đẹp đó' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'Hôm cậu bảo ăng để beooo như 🐷' },
+            { sender: 'tam', name: 'Tâm 🌷', text: 'oan ức quá<br>hôm đấy tớ chêu thui 😅😅' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'Nhưng tớ tin r' },
+            { sender: 'tam', name: 'Tâm 🌷', text: 'bà vẫn nhớ à :))<br>trời<br>thui tớ xin lỗi' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'Mà toàn xương chả làm đc món gì<br>Ng thấy 36 khúc xương xườn nhô ra' },
+            { sender: 'tam', name: 'Tâm 🌷', text: 'để tớ béo lên sau gặp lại cho bà xử tội nhé' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'Oke' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'Tăng hơn 3kg roi Tâm<br>Ng mềm nhũn' },
+            { sender: 'tam', name: 'Tâm 🌷', text: 'nhưng bà vẫn gầy á' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'Trc có cơ bụng cơ<br>H toàn mỡ' },
+            { sender: 'tam', name: 'Tâm 🌷', text: 'thôi đc rồi, cho bạn xử lý tớ sau<br>bà ngủ đii, tớ mai nghỉ nên thoải mái<br>ngủ ngonn' },
+            { sender: 'tam', name: 'Tâm 🌷', text: 'từ khi nào tớ có thể thoải mái chia sẻ thế nhỉ' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'Z tốt chứ s' },
+            { sender: 'tam', name: 'Tâm 🌷', text: 'bạn cứ coi tớ như một người chia sẻ nhé tớ k có ý gì đâu' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'Cậu nà ctrai cậu khuyên z tớ mừng lắm' },
+            { sender: 'tam', name: 'Tâm 🌷', text: 'tớ còn trẻ con lắm, tớ hiện tại chưa muốn yêu ai á<br>nên cậu đừng lo gì nha' },
+            { sender: 'hoa', name: 'Hoa 🌷', text: 'Tớ biết rui mà' }
+        ];
+
+        function renderMessages() {
+            const container = document.getElementById('chatContainer');
+            container.innerHTML = '';
+
+            defaultMessages.forEach(msg => {
+                const bubble = document.createElement('div');
+                bubble.className = `chat-bubble ${msg.sender}`;
+                bubble.innerHTML = `<span class="sender-name">${msg.name}</span>${msg.text}`;
+                container.appendChild(bubble);
+            });
+        }
+
+        renderMessages();
+    </script>
+</body>
+</html>         

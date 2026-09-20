@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hoaaa Hậuuu - Nhật Ký Kỷ Niệm</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
@@ -52,7 +52,7 @@
 
         header {
             text-align: center;
-            margin-bottom: 35px;
+            margin-bottom: 40px;
             position: relative;
             z-index: 10;
         }
@@ -62,7 +62,7 @@
             font-size: 3.5rem;
             color: var(--primary-pink);
             text-shadow: 2px 2px 4px rgba(255,182,193,0.6);
-            margin-bottom: 8px;
+            margin-bottom: 10px;
         }
 
         header p {
@@ -71,21 +71,27 @@
             font-weight: 500;
         }
 
-        /* Menu các ô (3 ô gọn gàng) */
+        /* Khu vực các nút bấm điều hướng (Menu các ô) */
         .menu-container {
             position: relative;
             z-index: 10;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            max-width: 450px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            max-width: 600px;
             width: 100%;
+        }
+
+        @media (max-width: 550px) {
+            .menu-container {
+                grid-template-columns: 1fr;
+            }
         }
 
         .menu-card {
             background: white;
             border-radius: 20px;
-            padding: 20px;
+            padding: 25px 20px;
             text-align: center;
             text-decoration: none;
             color: var(--text-main);
@@ -93,24 +99,20 @@
             border: 2px solid #ffd1dc;
             transition: all 0.3s ease;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 20px;
+            gap: 10px;
         }
 
         .menu-card:hover {
-            transform: translateY(-4px);
+            transform: translateY(-5px);
             background-color: var(--light-pink);
             border-color: var(--primary-pink);
             box-shadow: 0 12px 30px rgba(216, 112, 147, 0.25);
         }
 
         .menu-icon {
-            font-size: 2.3rem;
-            min-width: 50px;
-        }
-
-        .menu-text {
-            text-align: left;
+            font-size: 2.5rem;
         }
 
         .menu-title {
@@ -118,7 +120,6 @@
             font-size: 1.8rem;
             color: var(--primary-pink);
             font-weight: 700;
-            margin-bottom: 4px;
         }
 
         .menu-desc {
@@ -127,7 +128,7 @@
         }
 
         footer {
-            margin-top: 35px;
+            margin-top: 40px;
             position: relative;
             z-index: 10;
             font-size: 0.85rem;
@@ -137,6 +138,7 @@
 </head>
 <body>
 
+    <!-- Hiệu ứng hoa bay -->
     <script>
         const flowers = ['🌷', '🌸', '🌹', '🌺', '🌻', '💮'];
         for (let i = 0; i < 20; i++) {
@@ -152,41 +154,43 @@
     </script>
 
     <header>
-        <h1>Hoaaa Hậuuu 🌷</h1>
-        <p>Góc nhỏ kỷ niệm của Hoaa & Tâm</p>
+        <h1>Tâm & Hoa 🌷</h1>
+        <p>Góc nhỏ lưu giữ kỷ niệm của chúng mình</p>
     </header>
 
+    <!-- Các ô điều hướng -->
     <div class="menu-container">
         <!-- Ô 1: Cuộc trò chuyện -->
         <a href="chat.html" class="menu-card">
             <div class="menu-icon">💬</div>
-            <div class="menu-text">
-                <div class="menu-title">Cuộc Trò Chuyện</div>
-                <div class="menu-desc">Xem lại nhật ký tin nhắn giữa hai đứa</div>
-            </div>
+            <div class="menu-title">Cuộc Trò Chuyện</div>
+            <div class="menu-desc">Xem lại nhật ký tin nhắn & trò chuyện</div>
         </a>
 
         <!-- Ô 2: Chia sẻ hằng ngày -->
         <a href="daily.html" class="menu-card">
             <div class="menu-icon">📅</div>
-            <div class="menu-text">
-                <div class="menu-title">Chia Sẻ Hằng Ngày</div>
-                <div class="menu-desc">Chuyện vui buồn và công việc mỗi ngày</div>
-            </div>
+            <div class="menu-title">Chia Sẻ Hằng Ngày</div>
+            <div class="menu-desc">Cập nhật chuyện vui buồn mỗi ngày</div>
         </a>
 
-        <!-- Ô 3: Hình ảnh kỷ niệm -->
+        <!-- Ô 3: Lời nhắn nhủ -->
+        <a href="notes.html" class="menu-card">
+            <div class="menu-icon">💌</div>
+            <div class="menu-title">Lời Nhắn Nhủ</div>
+            <div class="menu-desc">Gửi gắm lời chúc và sự dặn dò</div>
+        </a>
+
+        <!-- Ô 4: Hình ảnh kỷ niệm -->
         <a href="photos.html" class="menu-card">
             <div class="menu-icon">🖼️</div>
-            <div class="menu-text">
-                <div class="menu-title">Hình Ảnh Kỷ Niệm</div>
-                <div class="menu-desc">Album ảnh xòe quạt xinh xắn của Hoaa</div>
-            </div>
+            <div class="menu-title">Hình Ảnh Kỷ Niệm</div>
+            <div class="menu-desc">Album ảnh xòe quạt của Hoa Hậu</div>
         </a>
     </div>
 
     <footer>
-        Made with 🌷 by Tâm & Hoaa
+        Made with 💖 by Tâm & Hoa
     </footer>
 
 </body>

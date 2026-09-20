@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Lời Nhắn Nhủ - Tâm & Hoa 🌷</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #fff0f5;
+            --text-main: #4a4a4a;
+            --primary-pink: #d87093;
+            --light-pink: #ffe4e1;
+            --card-bg: #fffbfd;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding: 15px;
+        }
+
+        /* Hiệu ứng hoa bay nền */
+        .flower-float {
+            position: fixed;
+            font-size: 24px;
+            user-select: none;
+            z-index: 0;
+            pointer-events: none;
+            animation: floatAround linear infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes floatAround {
+            0% { transform: translateY(110vh) translateX(0) rotate(0deg); }
+            50% { transform: translateY(50vh) translateX(50px) rotate(180deg); }
+            100% { transform: translateY(-10vh) translateX(-30px) rotate(360deg); }
+        }
+
+        /* Hoa bắn tung tóe khi bấm mở */
+        .burst-flower {
+            position: fixed;
+            font-size: 22px;
+            z-index: 9999;
+            pointer-events: none;
+            animation: burstUp 1s ease-out forwards;
+        }
+
+        @keyframes burstUp {
+            0% {
+                transform: translate(0, 0) scale(0.5) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--dx), var(--dy)) scale(1.3) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Nút quay lại trang chủ dạng icon dễ thương */
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: white;
+            color: var(--primary-pink);
+            border: 2px solid #ffd1dc;
+            padding: 8px 18px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(216, 112, 147, 0.15);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: var(--light-pink);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(216, 112, 147, 0.25);
+        }
+
+        /* Tiêu đề phía trên khung */
+        header {
+            text-align: center;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 10;
+        }
+
+        header h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.8rem;
+            color: var(--primary-pink);
+            text-shadow: 2px 2px 4px rgba(255,182,193,0.6);
+        }
+
+        /* Khung lớn bọc ngoài phong cách ebook */
+        .ebook-wrapper {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            width: 100%;
+            max-width: 680px;
+            height: 78vh;
+            border-radius: 24px;
+            box-shadow: 0 15px 35px rgba(216, 112, 147, 0.2);
+            border: 2px solid #ffccd5;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 10;
+            overflow: hidden;
+        }
+
+        /* Thanh công cụ phía trên khung */
+        .ebook-toolbar {
+            padding: 14px 20px;
+            border-bottom: 1px solid #fce4ec;
+            display: flex;
+            align-items: center;
+            background: #fff5f7;
+            flex-shrink: 0;
+        }
+
+        .toolbar-badge {
+            background: var(--light-pink);
+            color: var(--primary-pink);
+            padding: 6px 18px;
+            border-radius: 15px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border: 1px solid #ffb6c1;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Khu vực chứa danh sách thẻ ngày (Cuộn tổng bên ngoài) */
+        .notes-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Tùy chỉnh thanh cuộn tổng */
+        .notes-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        .notes-container::-webkit-scrollbar-track {
+            background: rgba(255, 240, 245, 0.5);
+            border-radius: 10px;
+        }
+        .notes-container::-webkit-scrollbar-thumb {
+            background: #ffb6c1;
+            border-radius: 10px;
+        }
+        .notes-container::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-pink);
+        }
+
+        /* Thẻ ghi chú theo từng ngày */
+        .note-card {
+            background: var(--card-bg);
+            border: 1px solid #ffd1dc;
+            border-left: 5px solid var(--primary-pink);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(216, 112, 147, 0.08);
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .note-card:hover {
+            box-shadow: 0 6px 20px rgba(216, 112, 147, 0.15);
+            transform: translateY(-1px);
+        }
+
+        /* Phần tiêu đề ngày */
+        .note-date {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.6rem;
+            color: var(--primary-pink);
+            padding: 15px 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fff9fa;
+            user-select: none;
+            transition: background 0.2s;
+        }
+
+        .note-date:hover {
+            background: #ffe4e166;
+        }
+
+        /* Biểu tượng mũi tên xoay khi bấm */
+        .arrow-icon {
+            font-size: 0.9rem;
+            font-family: 'Montserrat', sans-serif;
+            transition: transform 0.3s ease;
+            color: var(--primary-pink);
+            background: var(--light-pink);
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .note-card.active .arrow-icon {
+            transform: rotate(180deg);
+            background: var(--primary-pink);
+            color: white;
+        }
+
+        /* Phần nội dung bên trong (Có thanh cuộn riêng cho từng ô khi mở ra) */
+        .note-content {
+            max-height: 0;
+            overflow-y: auto; /* Bật thanh cuộn riêng bên trong ô */
+            padding: 0 20px;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: var(--text-main);
+            background: white;
+            border-top: 0px dashed transparent;
+            transition: max-height 0.4s ease, padding 0.4s ease, border-color 0.4s ease;
+        }
+
+        /* Tùy chỉnh thanh cuộn riêng bên trong ô ngày */
+        .note-content::-webkit-scrollbar {
+            width: 5px;
+        }
+        .note-content::-webkit-scrollbar-thumb {
+            background: #ffb6c1;
+            border-radius: 10px;
+        }
+        .note-content::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-pink);
+        }
+
+        .note-card.active .note-content {
+            max-height: 180px; /* Chiều cao cố định của phần nội dung để xuất hiện thanh cuộn bên trong */
+            padding: 16px 20px 20px 20px;
+            border-top: 1px dashed #ffd1dc;
+        }
+
+        .note-content strong {
+            color: var(--primary-pink);
+            font-size: 1.05rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Nút quay về trang chủ -->
+    <a href="index.html" class="back-btn">🏠</a>
+
+    <!-- Hiệu ứng hoa bay nền -->
+    <script>
+        const flowers = ['🌷', '🌸', '🌹', '🌺', '🌻', '💮'];
+        for (let i = 0; i < 15; i++) {
+            const div = document.createElement('div');
+            div.className = 'flower-float';
+            div.innerHTML = flowers[Math.floor(Math.random() * flowers.length)];
+            div.style.left = Math.random() * 100 + 'vw';
+            div.style.animationDuration = (Math.random() * 8 + 6) + 's';
+            div.style.animationDelay = (Math.random() * 5) + 's';
+            div.style.fontSize = (Math.random() * 10 + 14) + 'px';
+            document.body.appendChild(div);
+        }
+    </script>
+
+    <header>
+        <h1>Gửi Cho Hoaaaa Hậu 🌷✨</h1>
+    </header>
+
+    <!-- Khung ebook bọc ngoài -->
+    <div class="ebook-wrapper">
+        <div class="ebook-toolbar">
+            <div class="toolbar-badge">Gửi đến Hoaa</div>
+        </div>
+
+        <!-- Khu vực hiển thị danh sách lời nhắn theo ngày -->
+        <div class="notes-container">
+
+            <!-- Ngày 1 -->
+            <div class="note-card">
+                <div class="note-date" onclick="toggleCard(this, event)">
+                    <span>🌸 Ngày 18/06/2026 ✨</span>
+                    <span class="arrow-icon">▼</span>
+                </div>
+                <div class="note-content">
+                    <strong>Tâm 🌷:</strong> Gặp được cậu thật sự là may mắn lớn của tớ, Hoaa là một người rất đặc biệt, ban đầu Hoaa mỏ hỗn lắm nhé, nhưng mà dễ thương lắm, tớ tiếp xúc với Hoaa, biết cậu là người tốt lắm á, biết cảm thông, quan tâm người khác, tớ thích nói chuyện với Hoaa lắm, nhưng Hoaa phải về quê sau đợt thực tập, tớ rất mong Hoaa sẽ thật giỏi, thật vui, thật hạnh phúc, nhưng mà tớ cũng buồn á vì phải lâu nữa tớ mới gặp lại cậu, dù sao tớ cũng mừng cho Hoaa vì Hoaa sắp được về nhà rồi, được ngắm quê hương, được ăn cơm mẹ nấu.. Phải giữ sức khỏe Hoaa nhé, cậu yếu lắm đấy, cố lên 🌷 🌷 🌷
+                </div>
+            </div>
+
+            <!-- Ngày 2 -->
+            <div class="note-card">
+                <div class="note-date" onclick="toggleCard(this, event)">
+                    <span>🌸 Ngày 20/09/2026 ✨</span>
+                    <span class="arrow-icon">▼</span>
+                </div>
+                <div class="note-content">
+                    <strong>Tâm 🌷:</strong> Hôm nay tớ vào xưởng học setup, các bạn cũng vui lắm, học cũng nhiều, hôm nay nói chuyện với Hoaa, tớ thích lắm đấy, mà tớ ít nói quá, Hoaa nói nhiều bù cho tớ :)), bình thường tớ nói nhiều lắm, tớ nghe Hoaa bảo cất qr vào ốp điện thoại tớ cảm động lắm, tớ sẽ làm cho Hoaa cái qr mới, màu hồng xinh xắn, Hoaa nhớ giữ gìn cẩn thận nhé 🌷
+            </div>
+
+            <!-- CÁCH THÊM NGÀY MỚI: 
+                 Copy nguyên thẻ <div class="note-card">...</div> dán xuống dưới này, sửa lại ngày và nội dung! -->
+
+        </div>
+    </div>
+
+    <script>
+        // Hàm xử lý bấm vào ngày để mở/đóng nội dung kèm hiệu ứng bắn hoa
+        function toggleCard(headerElement, event) {
+            const card = headerElement.parentElement;
+            const isOpen = card.classList.contains('active');
+
+            if (!isOpen) {
+                card.classList.add('active');
+                createFlowerBurst(event.clientX, event.clientY);
+            } else {
+                card.classList.remove('active');
+            }
+        }
+
+        // Hiệu ứng bắn hoa tung tóe
+        function createFlowerBurst(x, y) {
+            const burstSymbols = ['🌷', '🌸', '💖', '✨', '🌹'];
+            for (let i = 0; i < 12; i++) {
+                const span = document.createElement('span');
+                span.className = 'burst-flower';
+                span.innerHTML = burstSymbols[Math.floor(Math.random() * burstSymbols.length)];
+                span.style.left = x + 'px';
+                span.style.top = y + 'px';
+
+                const angle = Math.random() * Math.PI * 2;
+                const distance = Math.random() * 100 + 50;
+                const dx = Math.cos(angle) * distance + 'px';
+                const dy = Math.sin(angle) * distance + 'px';
+
+                span.style.setProperty('--dx', dx);
+                span.style.setProperty('--dy', dy);
+
+                document.body.appendChild(span);
+
+                setTimeout(() => {
+                    span.remove();
+                }, 1000);
+            }
+        }
+    </script>
+</body>
+</html>
